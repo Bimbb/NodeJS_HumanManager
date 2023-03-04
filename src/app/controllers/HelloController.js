@@ -5,6 +5,5 @@ class HelloController {
     }
 }
 
-
-
 module.exports = new HelloController;
+
