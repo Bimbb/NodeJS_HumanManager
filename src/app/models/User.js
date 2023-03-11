@@ -18,7 +18,7 @@ const User = new Schema(
         departmentID: { type: Schema.Types.ObjectId, ref: "Department" },
         degreeID: { type: Schema.Types.ObjectId, ref: "Degree" },
         salaryID: { type: Schema.Types.ObjectId, ref: "Salary" },
-
+        
     },
     {
         timestamps: true,
