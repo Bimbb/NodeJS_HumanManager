@@ -9,7 +9,6 @@ const route = require('./routes');
 const db = require('./config/db');
 db.connect();
 
-
 app.use(express.json());
 
 
