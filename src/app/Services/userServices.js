@@ -3,6 +3,7 @@ const buildObject = require('../utils/buildObject')
 const bcryptjs = require('bcryptjs')
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const promisify = require('util').promisify;
 // Đăng ký vào dữ liệu
 
 class UserService{
@@ -55,27 +56,10 @@ class UserService{
       })
     }
   // Generate Token
-    generateToken = async (user = {}) =>{
-      const expiration =
-      Math.floor(Date.now() / 1000) + 60 * process.env.JWT_EXPIRATION_IN_MINUTES;
-      console.log('Check User',user)
-      return new Promise((resolve, reject) => {
-        if(user){
-          
-          const token = jwt.sign(
-            { user_id: user._id,email : user.email },
-            process.env.JWT_SECRET,
-            {
-              expiresIn: expiration,
-            }
-          );
-          resolve(token)
-        }
-        else{
-          console.log('Test lỗi'+err.message)
-          reject(buildObject.buildErrObject(404,'User Not Found'))
-        }
-      });
+    
+
+    edit = async(id='',user = {}) =>{
+
     }
 }
 
