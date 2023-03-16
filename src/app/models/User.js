@@ -18,12 +18,19 @@ const User = new Schema(
         departmentID: { type: Schema.Types.ObjectId, ref: "Department" },
         degreeID: { type: Schema.Types.ObjectId, sref: "Degree" },
         salaryID: { type: Schema.Types.ObjectId, ref: "Salary" },
-        roles:[ { type: Schema.Types.ObjectId, ref: "Role" }],
+        roles:[ 
+            { 
+                type: Schema.Types.ObjectId, 
+                ref: "Role" 
+            }
+        ],
     },
     {
         timestamps: true,
     }
 );
+
+User.pre('find')
 
 module.exports = mongoose.model("User", User);
 

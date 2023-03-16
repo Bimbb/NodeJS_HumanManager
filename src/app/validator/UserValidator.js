@@ -62,6 +62,26 @@ class UserValidation{
         });
       })
     }
+
+    checkPermissions = ({id = '', roles = []},next) => {
+
+      return new Promise((resolve,reject) => {
+        UserService.findUserById(id, async(err,item) =>{
+          try {
+
+            if(roles.includes(item.roles))
+              {
+                return resolve(next());
+              }
+              reject(buildObject.buildErrObject(401,'Unauthorized'))
+          } catch (error) {
+            reject(error);
+          }
+
+        })
+        
+      })
+    }
 }
 
   module.exports = new UserValidation

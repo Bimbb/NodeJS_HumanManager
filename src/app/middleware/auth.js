@@ -1,6 +1,6 @@
+const buildObject = require('../utils/buildObject');
 const token = require('./token')
 class Auth{
-
   isAuth = async (req,res,next) => {
     const accessToken = req.headers.authorization;
     console.log(accessToken);
@@ -14,6 +14,18 @@ class Auth{
         .send('Bạn không có quyền truy cập vào tính năng này!');
     }
     return next();
+  }
+
+  isAuthorize = (roles) => async (req,res,next) => {
+    try {
+      const data = {
+        id : req.user._id,
+        roles
+      }
+      
+    } catch (error) {
+        buildObject.buildErrObject(res,error)
+    }
   }
 }
 

@@ -1,9 +1,10 @@
 const User = require('../models/User')
+const roleService = require('../Services/roleServices')
 const buildObject = require('../utils/buildObject')
 const bcryptjs = require('bcryptjs')
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-const promisify = require('util').promisify;
+const { default: mongoose } = require('mongoose');
 // Đăng ký vào dữ liệu
 
 class UserService{
@@ -12,14 +13,24 @@ class UserService{
         const formUser = req.body;
         formUser.password = await bcryptjs.hash(formUser.password, 10);
         const user = new User(formUser); 
+        user._id = mongoose.Types.ObjectId();
         return new Promise((resolve, reject) => {
-           user.save((err, item) =>{
+           user.save(async (err, item) =>{
             if(err){
               reject(buildObject.buildErrObject(422,err.message))
             }
+            const role = await roleService.findRoleByName('USER');
+            console.log('Test Role Id',role._id)
+            console.log('Test User Id',item._id)
+            await User.findByIdAndUpdate(item._id,
+            {
+              $push : {roles : role._id}
+            })
             resolve(item);
+            });
+            
           });
-        });
+          
     }
     login = async (req = {}) =>{
       const formUser = req.body;
@@ -56,7 +67,21 @@ class UserService{
       })
     }
   // Generate Token
-    
+    findUserById = (id = '') => {
+      return new Promise((resolve,reject) =>{
+        User.findById(id, async (err,item) =>{
+          try {
+            
+            if(!err){
+              resolve(item);
+            }
+            reject(err);
+          } catch (error) {
+            reject(error);
+          }
+        })
+      })
+    }
 
     edit = async(id='',user = {}) =>{
 

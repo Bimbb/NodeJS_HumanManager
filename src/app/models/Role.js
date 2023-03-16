@@ -9,6 +9,11 @@ const Role = new Schema(
     {
         name: { type: String, require: true },
         position: { type: String, require: true },
+        users:
+        [ 
+            { type: Schema.Types.ObjectId, ref: "User" }
+        ],
+
     },
     {
         timestamps: true,
