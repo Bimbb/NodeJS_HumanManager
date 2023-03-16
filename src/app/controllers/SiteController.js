@@ -13,7 +13,7 @@ class SiteController {
 
     index(req, res) {
         res.json({
-            name: 'test'
+            name: 'test Site'
         });
     }
 }
