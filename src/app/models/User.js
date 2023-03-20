@@ -30,7 +30,6 @@ const User = new Schema(
     }
 );
 
-User.pre('find')
 
 module.exports = mongoose.model("User", User);
 

@@ -28,16 +28,19 @@ class UserValidation{
 
     checkUserExists = (email = '') =>{
       return new Promise((resolve, reject) => {
+        if(email === '' || email === null){
+          reject(buildObject.buildErrObject(422, 'Please Enter your Email'))
+        }
         User.findOne(
           {
-            email
+            email : email
           },
           (err, item) => {
             if (err) {
               reject(buildObject.buildErrObject(422, err.message))
             }
             if (!item) {
-              reject(buildObject.buildErrObject(400, 'USER NOT FOUND'))
+              reject(buildObject.buildErrObject(404, 'USER NOT FOUND'))
             }
             resolve(true) // return true if pass validate
           }
@@ -45,20 +48,21 @@ class UserValidation{
       })
     }
     checkLogin = async (email = '',password = '') =>{
-      console.log('Check email : ',email);
-      console.log('Check password : ',password);
+      // console.log('Check email : ',email);
+      // console.log('Check password : ',password);
       return new Promise((resolve, reject) => {
-        
+        if(password === '' || password === null){
+          reject(buildObject.buildErrObject(422, 'Please Enter your Password'))
+        }
         UserService.findUser(email).then(async (val) =>{
-            console.log(val);
             if(val && (await bcrypt.compare(password, val.password))){
               resolve(true) // compare User password
             }
             else{
-              reject(false)
+              reject(buildObject.buildErrObject(401,'User or Password is not correct'))
             }
         }).catch((err) =>{
-            reject(buildObject.buildErrObject(422, err.message))
+            reject(buildObject.buildErrObject(404, err.message))
         });
       })
     }
