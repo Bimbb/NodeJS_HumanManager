@@ -32,11 +32,11 @@ class UserService{
           });
           
     }
-    login = async (req = {}) =>{
-      const formUser = req.body;
+    login = async (email = '') =>{
       const user =  User.findOne({
-        email : formUser.email,
+        email : email,
       })
+      console.log(user);
       if(user){
         return new Promise((resolve, reject) => {
           // if(!user){
@@ -66,7 +66,7 @@ class UserService{
         )
       })
     }
-  // Generate Token
+  
     findUserById = (id = '') => {
       return new Promise((resolve,reject) =>{
         User.findById(id, async (err,item) =>{
@@ -82,7 +82,22 @@ class UserService{
         })
       })
     }
-
+    getRoleByEmail = async (email = '') => {
+      return new Promise(async (resolve,reject) =>{
+        await User.
+          findOne({email : formUser.email}).
+          populate({
+              path : "roles",
+              select : "name"
+            }).
+            then(res =>{
+              resolve(res)
+            }).catch(err => {
+              reject(err)
+            });
+      })
+      
+    }
     edit = async(id='',user = {}) =>{
 
     }
