@@ -2,6 +2,7 @@ const userService = require('../Services/userServices')
 const userValidation = require('../validator/UserValidator')
 const token = require('../middleware/token')
 const User = require('../models/User')
+const auth = require('../middleware/auth')
 const userServices = require('../Services/userServices')
 class AuthController{
 
@@ -16,9 +17,15 @@ class AuthController{
         then(res =>{
             return res;
         });
-        res.status(200).json(user)
+        res.status(200).json('??')
     }
+    getCurrentUser = async (req, res) => {
+        //const id = '641166dd2e85b9b13ad74ee5';
+        const token = req.headers.authorization;
+        const data = await userService.getCurrentUser(token);
 
+        res.status(200).json(data)
+    }
     register = async (req,res) =>{
         try{
             res.status(201).json(
@@ -67,7 +74,7 @@ class AuthController{
             const data = await token.verifyToken(refreshToken); // get Email
             console.log(data);
             if(data){
-                const user =  await userServices.getRoleByEmail(formUser.email)
+                const user =  await userServices.getRoleByEmail(data.email)
                 res.status(200).json({
                     token : await token.generateToken(user),
                     refreshtoken : await token.generateRefreshToken(user)
@@ -79,6 +86,12 @@ class AuthController{
             //res.status(error.status).json({message : error.message})
         }
     }
+    checkAuth = async (req,res) => {
+        // const refreshToken = req.headers.authorization;
 
+        // const data = await auth.isAuthen(refreshToken);
+
+        res.status(200).json();
+    }
 }
 module.exports = new AuthController
