@@ -12,7 +12,7 @@ class Token{
               { user_id: user._id,email : user.email,roles : user.roles.map(p => p.name) },
               process.env.JWT_SECRET,
               {
-                expiresIn: expiration,
+                expiresIn: 120,
               }
             );
             resolve(token)
