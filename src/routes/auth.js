@@ -7,7 +7,7 @@ const authController = require('../app/controllers/AuthController');
 const isAuth = require('../app/middleware/auth')
 //,isAuth.isAuthorize(['ADMIN','USER'])
 router.post('/register', authController.register)
-router.get('/testAuthentication',isAuth.isAuth,isAuth.isAuthorize(['xcvzxcCX']),authController.index);
+router.get('/testAuthentication',isAuth.isAuth,isAuth.isAuthorize(['USER']),authController.index);
 router.get('/getCurrentUser',isAuth.isAuth,authController.getCurrentUser);
 router.get('/authentication',isAuth.isAuth,authController.checkAuth);
 router.post('/login',authController.login)
