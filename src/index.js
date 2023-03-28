@@ -1,6 +1,7 @@
 const path = require('path');
 const express = require('express');
 const morgan = require('morgan');
+const bodyParser = require('body-parser');
 const app = express();
 const port = 3001;
 require('dotenv').config();
@@ -20,6 +21,9 @@ db.connect();
 
 app.use(express.json());
 
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 
 route(app);
