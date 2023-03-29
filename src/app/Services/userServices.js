@@ -4,6 +4,8 @@ const buildObject = require('../utils/buildObject')
 const bcryptjs = require('bcryptjs')
 const tokenService = require('../middleware/token')
 const { default: mongoose } = require('mongoose');
+const { resolve } = require('path')
+const { reject } = require('async')
 // Đăng ký vào dữ liệu
 
 class UserService{
@@ -19,8 +21,6 @@ class UserService{
                 reject(buildObject.buildErrObject(422,err.message))
               }
               const role = await roleService.findRoleByName('USER');
-              console.log('Test Role Id',role._id)
-              console.log('Test User Id',item._id)
               await User.findByIdAndUpdate(item._id,
               {
                 $push : {roles : role._id}
@@ -70,7 +70,6 @@ class UserService{
       return new Promise((resolve,reject) =>{
         User.findById(id, async (err,item) =>{
           try {
-            
             if(!err){
               resolve(item);
             }
@@ -85,6 +84,22 @@ class UserService{
       return new Promise(async (resolve,reject) =>{
         await User.
           findOne({email : email}).
+          populate({
+              path : "roles",
+              populate : {path: "permissions"},
+              select : "name"
+            }).
+            then(res =>{
+              resolve(res)
+            }).catch(err => {
+              reject(err)
+            });
+      })
+    }
+    getRolesById = async (id = '') => {
+      return new Promise(async (resolve,reject) =>{
+        await User.
+          findById(id).
           populate({
               path : "roles",
               select : "name"
@@ -120,8 +135,31 @@ class UserService{
           }
       })
     }
+    getlstUser = async () => {
+      return new Promise(async (resolve,reject) => {
+          await User.find({}).then(res => {
+            resolve(res);
+          })
+      });
+    }
     edit = async(id='',user = {}) =>{
 
+    }
+
+    addRolestoUser = async(userId='',roles = []) => {
+      return new Promise(async (resolve,reject) => {
+        const userJoinRoles = await this.getRolesById(userId)
+        await User.findByIdAndUpdate(userId,
+          {
+            $pullAll : {roles : userJoinRoles.roles}
+          }).then(async () => {
+            await User.findByIdAndUpdate(userId,{
+              $push : {roles : roles}
+            })
+          })
+          const data = await this.getRolesById(userId)
+          resolve(data)
+      }) 
     }
 }
 

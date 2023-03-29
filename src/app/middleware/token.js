@@ -6,13 +6,17 @@ class Token{
     generateToken = async (user = {}) =>{
         const expiration =
         new Date().getTime() + 10 * 60 * process.env.JWT_EXPIRATION_IN_MINUTES
+        let data = [];
         return new Promise((resolve, reject) => {
           if(user){
+            user.roles.map(e => e.permissions.map(p => 
+              data.push(`${e.name}.${p.name}`)
+            ))
             const token = jwt.sign(
-              { user_id: user._id,email : user.email,roles : user.roles.map(p => p.name) },
+              { user_id: user._id,email : user.email,roles : data},
               process.env.JWT_SECRET,
               {
-                expiresIn: 120,
+                expiresIn: 60,
               }
             );
             resolve(token)
