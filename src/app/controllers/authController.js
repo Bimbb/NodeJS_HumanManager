@@ -1,23 +1,15 @@
 const userService = require('../Services/userServices')
+const roleService = require('../Services/roleServices')
 const userValidation = require('../validator/UserValidator')
 const token = require('../middleware/token')
 const User = require('../models/User')
 const auth = require('../middleware/auth')
-const userServices = require('../Services/userServices')
 class AuthController{
 
     index = async (req, res) => {
         //const id = '641166dd2e85b9b13ad74ee5';
-        const user = await User.
-        findById('641166dd2e85b9b13ad74ee5').
-        populate({
-            path : "roles",
-            select : "name"
-        }).
-        then(res =>{
-            return res;
-        });
-        res.status(200).json('??')
+        const user = await userService.getRoleByEmail('nht.it19@gmail.com')
+        res.status(200).json(user)
     }
     getCurrentUser = async (req, res) => {
         //const id = '641166dd2e85b9b13ad74ee5';
@@ -48,7 +40,7 @@ class AuthController{
             const doesEmailExists = await userValidation.checkUserExists(formUser.email)
             const checkLoginbyUser = await userValidation.checkLogin(formUser.email,formUser.password)
             if(doesEmailExists && checkLoginbyUser){
-                const user =  await userServices.getRoleByEmail(formUser.email)
+                const user =  await userService.getRoleByEmail(formUser.email)
                 console.log('Check data : ',user);
                 res.status(200).json(
                     {
@@ -74,7 +66,7 @@ class AuthController{
             const data = await token.verifyToken(refreshToken); // get Email
             console.log(data);
             if(data){
-                const user =  await userServices.getRoleByEmail(data.email)
+                const user =  await userService.getRoleByEmail(data.email)
                 res.status(200).json({
                     token : await token.generateToken(user),
                     refreshtoken : await token.generateRefreshToken(user)
@@ -92,6 +84,16 @@ class AuthController{
         // const data = await auth.isAuthen(refreshToken);
 
         res.status(200).json();
+    }
+
+    addRolestoUser = async (req,res) => {
+        let dataUser = await userService.addRolestoUser(req.body.id,req.body.roles);
+        let dataRole = await roleService.UpdateRoleByUser(req.body.id,req.body.roles);
+        
+        res.status(200).json({
+            User : dataUser,
+            Role : dataRole
+        });
     }
 }
 module.exports = new AuthController

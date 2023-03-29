@@ -1,6 +1,6 @@
 const User = require('../models/User');
 const { multipleMongooseToObject, mongooseToObject}  = require('../../util/mongoose')
-
+const Department = require('../models/Department')
 
 
 class UserController{
@@ -51,23 +51,23 @@ class UserController{
       .catch(err =>{
           res.status(500).json('Sửa không thành công, lỗi server')
       });
-  } 
+     } 
 
+     async deleteUser(req, res,next) {
 
+        Department.deleteOne({ _id: req.body.id })
+        .then(() => {
+           res.json('Xóa thành công')
+        })
+        .catch(err =>{
+            res.status(500).json('Xóa không thành công, lỗi server')
+        });
+    } 
 
 
 
   // [DELETE]/salary/:id/delete
-  async deleteUser(req, res,next) {
-
-      Department.deleteOne({ _id: req.body.id })
-      .then(() => {
-         res.json('Xóa thành công')
-      })
-      .catch(err =>{
-          res.status(500).json('Xóa không thành công, lỗi server')
-      });
-  } 
+  
 
 }
 
