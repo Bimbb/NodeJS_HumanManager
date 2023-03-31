@@ -55,12 +55,6 @@ class RoleController{
         let dataRole = await roleService.addPermissionstoRole(req.body.id,req.body.permissions);
         let dataPermission = await roleService.UpdateRoleByPermission(req.body.id,req.body.permissions);
 
-        
-        let dataRoles = [];
-        dataRole.permissions.map(p => {
-            dataRoles.push(`${dataRole.name}.${p.name}`)
-            //dataPermissions.push(p.permissions.map(e => dataRoles.map(p => p + e.name)))
-        })
         console.log('Check data',dataRoles);
         res.status(200).json({
             Role : dataRole,

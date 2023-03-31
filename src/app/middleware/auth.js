@@ -19,25 +19,25 @@ class Auth{
     req.data = verified
     next()
   }
-  isAuthen = async (token = '') => {
-    if (!token){
-      return {
-        status : 401,
-        data : 'Mời bạn nhập Token'
-      }
-    }
-    const verified = await tokenService.verifyToken(token.replace('Bearer ', ''))
-                .then( () => true) // return true
-                .catch( () => false) // return false
-    console.log('Check Token is Accessed : ',verified);
-    if(!verified){
-      return {
-        status : 401,
-        data : 'Token không hợp lệ!'
-      }
-    }
-    return verified;
-  }
+  // isAuthen = async (token = '') => {
+  //   if (!token){
+  //     return {
+  //       status : 401,
+  //       data : 'Mời bạn nhập Token'
+  //     }
+  //   }
+  //   const verified = await tokenService.verifyToken(token.replace('Bearer ', ''))
+  //               .then( () => true) // return true
+  //               .catch( () => false) // return false
+  //   console.log('Check Token is Accessed : ',verified);
+  //   if(!verified){
+  //     return {
+  //       status : 401,
+  //       data : 'Token không hợp lệ!'
+  //     }
+  //   }
+  //   return verified;
+  // }
   isAuthorize = (roles = []) => async (req,res,next) => {
     
       const accessToken = req.headers.authorization;
@@ -47,17 +47,16 @@ class Auth{
     }).catch((err) => {
         return err; // return false
     })
-    console.log('Roles input : ',roles);
-    console.log('Access Token : ',accessToken);
+    console.log('Roles input : ',verified);
     if(!verified){
-      return res.status(401).send('Token không hợp lệ!');
+      return res.status(401).json('Token không hợp lệ!');
     }
     console.log(verified.roles);
       if(verified.roles.find(role => roles.includes(role))){
         next()
       }
       else{
-        res.status(403).send('Token : Khoong hop lej')
+        res.status(403).json('Bạn không có quyền truy cập !')
       }
   }
 }

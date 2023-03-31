@@ -6,7 +6,7 @@ const User = require('../models/User')
 const auth = require('../middleware/auth')
 class AuthController{
 
-    index = async (req, res) => {
+    getByEmail = async (req, res) => {
         //const id = '641166dd2e85b9b13ad74ee5';
         const user = await userService.getRoleByEmail('nht.it19@gmail.com')
         res.status(200).json(user)
@@ -79,11 +79,7 @@ class AuthController{
         }
     }
     checkAuth = async (req,res) => {
-        // const refreshToken = req.headers.authorization;
-
-        // const data = await auth.isAuthen(refreshToken);
-
-        res.status(200).json();
+        res.status(200).json('Cục chỉ nhỏ');
     }
 
     addRolestoUser = async (req,res) => {
