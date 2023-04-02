@@ -1,75 +1,80 @@
 const User = require('../models/User');
-const { multipleMongooseToObject, mongooseToObject}  = require('../../util/mongoose')
-const Department = require('../models/Department')
 
-
-class UserController{
-
-     // [GET]/user/
+class UserController {
+    // [GET]/user/
 
     listuser(req, res, next) {
         User.find({})
-        .then((users) => {
-            res.json(users)
-        })
-        .catch(next);
+            .then((users) => {
+                res.json(users);
+            })
+            .catch(next);
     }
 
-
     // [POST]/user/create
-    async createUser(req, res) {
-        const formUser = req.body;
-        const checkEmail = await User.findOne({ email: formUser.email });
-        const checkPhone = await User.findOne({ phone: formUser.phone });
-        if (checkEmail) {
 
-            res.json("Mail đã tồn tại")
-            return ;
+    async updateUser(req, res, next) {
+        try {
+            const { _id, ...updateData } = req.body;
+
+            if (!_id) {
+                return res.status(400).json({ message: 'Không tìm thấy ID người dùng' });
+            }
+            console.log('birth Day', updateData.birthDay);
+
+            await User.updateOne({ _id }, updateData)
+                .then(() => {
+                    res.status(200).json('Sửa thành công');
+                })
+                .catch((err) => {
+                    return res.status(500).json({ message: 'Lỗi server khi sửa', error: err.message });
+                });
+        } catch (err) {
+            return res.status(500).json({ message: 'Lỗi server khi sửa', error: err.message });
         }
+    }
 
-        if (checkPhone) {
-            res.json("SDT đã tồn tại")
-            return;
+    // [DELETE]/user/:id/delete
+    async deleteUser(req, res) {
+        try {
+            const user = await User.deleteOne({ _id: req.params.id });
+            if (!user) {
+                res.status(404).json('Không tìm thấy user với _id tương ứng.');
+            }
+            res.status(204).send('thành công');
+        } catch (error) {
+            console.log(error);
+            res.status(500).json('Xóa không thành công, lỗi server');
         }
+    }
 
-        formUser.active = true;
-        formUser.avatar = "https://i.pinimg.com/736x/7d/83/2a/7d832a6867b7a6b4fbec7ff05864df6e.jpg";
-        // formUser.password = await bcrypt.hash(formUser.phone, 10);
-        const user = new User(formUser); 
-        await user.save();
-        res.json("Thành công")
-    }     
-    
-    
+    async banUser(req, res) {
+        try {
+            const result = await User.updateOne({ _id: req.params.id }, { active: false });
+            if (result.nModified === 0) {
+                res.status(404).json('Không tìm thấy user với _id tương ứng.');
+            } else {
+                res.status(204).send('Thành công');
+            }
+        } catch (error) {
+            console.log(error);
+            res.status(500).json(' không thành công, lỗi server');
+        }
+    }
 
-    async updateUser(req, res,next) {
-
-      Department.updateOne({ _id: req.body._id },req.body)
-      .then(() => {
-      res.json('Sửa thành công')
-      })
-      .catch(err =>{
-          res.status(500).json('Sửa không thành công, lỗi server')
-      });
-     } 
-
-     async deleteUser(req, res,next) {
-
-        Department.deleteOne({ _id: req.body.id })
-        .then(() => {
-           res.json('Xóa thành công')
-        })
-        .catch(err =>{
-            res.status(500).json('Xóa không thành công, lỗi server')
-        });
-    } 
-
-
-
-  // [DELETE]/salary/:id/delete
-  
-
+    async unBanUser(req, res) {
+        try {
+            const result = await User.updateOne({ _id: req.params.id }, { active: true });
+            if (result.nModified === 0) {
+                res.status(404).json('Không tìm thấy user với _id tương ứng.');
+            } else {
+                res.status(204).send('Thành công');
+            }
+        } catch (error) {
+            console.log(error);
+            res.status(500).json(' không thành công, lỗi server');
+        }
+    }
 }
 
 module.exports = new UserController();
-
