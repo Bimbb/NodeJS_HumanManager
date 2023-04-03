@@ -79,7 +79,7 @@ class AuthController{
         }
     }
     checkAuth = async (req,res) => {
-        res.status(200).json('Cục chỉ nhỏ');
+        res.status(200).json('Authentication Success ');
     }
 
     addRolestoUser = async (req,res) => {
