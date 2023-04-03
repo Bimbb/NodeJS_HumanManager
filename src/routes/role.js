@@ -10,6 +10,9 @@ router.post('/create', roleController.createRole)
 router.post('/delete', roleController.delete)
 router.get('/details', roleController.details)
 router.post('/addPermissionstoRole', roleController.addPermissionstoRole)
+router.get('/getAll', roleController.getAll)
+router.get('/getById/:id', roleController.getById)
+router.get('/permission/getAll', roleController.getAllPermission)
 
 
 module.exports = router;

@@ -9,9 +9,13 @@ class Token{
         let data = [];
         return new Promise((resolve, reject) => {
           if(user){
-            user.roles.map(e => e.permissions.map(p => 
-              data.push(`${e.name}.${p.name}`)
-            ))
+            // user.roles.map(role => role.permissions.map(item => 
+            //   data.push(`${role.name}.${item.name}`)
+            // ))
+            user.roles.map(p => p.permissions.map(e => 
+                data.push(e.name)
+              ))
+            console.log(data);
             const token = jwt.sign(
               { user_id: user._id,email : user.email,roles : data},
               process.env.JWT_SECRET,
