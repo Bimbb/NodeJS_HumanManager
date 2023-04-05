@@ -10,7 +10,7 @@ class DegreeController {
     listDegree(req, res, next) {
         Degree.find({})
             .then((degrees) => {
-                res.json(degrees);
+                res.status(200).json(degrees);
             })
             .catch(next);
     }
@@ -34,7 +34,7 @@ class DegreeController {
     async updateDegree(req, res, next) {
         Degree.updateOne({ _id: req.body._id }, req.body)
             .then(() => {
-                res.json('Sửa thành công');
+                res.status(200).json('Sửa thành công');
             })
             .catch((err) => {
                 res.status(500).json('Sửa không thành công, lỗi server');

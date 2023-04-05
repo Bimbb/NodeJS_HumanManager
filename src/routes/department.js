@@ -4,10 +4,10 @@ const departmentController = require('../app/controllers/DepartmentController');
 
 const isAuth = require('../app/middleware/auth');
 
-router.get('/getAll', departmentController.listDepartment);
-router.post('/create', departmentController.createDepartment);
-router.delete('/:id/delete', departmentController.deleteDepartment);
-router.put('/:id/update', departmentController.updateDepartment);
-router.get('/:id/employee', departmentController.employeeDepartment);
+router.get('/getAll', isAuth.isAuth, isAuth.isAuthorize(['Department.VIEW']), departmentController.listDepartment);
+router.post('/create', isAuth.isAuth, isAuth.isAuthorize(['Department.CREATE']), departmentController.createDepartment);
+router.delete('/:id/delete', isAuth.isAuth, isAuth.isAuthorize(['Department.DELETE']), departmentController.deleteDepartment);
+router.put('/:id/update', isAuth.isAuth, isAuth.isAuthorize(['Department.UPDATE']), departmentController.updateDepartment);
+router.get('/:id/employee', isAuth.isAuth, isAuth.isAuthorize(['Department.VIEW']), departmentController.employeeDepartment);
 
 module.exports = router;

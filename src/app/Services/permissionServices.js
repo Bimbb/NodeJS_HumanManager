@@ -33,16 +33,16 @@ const lstPermission = [
     { name: `USER.Delete`, display: 'Xóa' },
 ];
 class PermissionService {
-    create = async (req = []) => {
-        return new Promise((resolve, reject) => {
-            Permission.insertMany(req, (err, item) => {
-                if (err) {
-                    reject(buildObject.buildErrObject(422, err.message));
-                }
-                resolve(item.map((p) => p._id));
-            });
-        });
-    };
+    // create = async (req = []) => {
+    //     return new Promise((resolve, reject) => {
+    //         Permission.insertMany(req, (err, item) => {
+    //             if (err) {
+    //                 reject(buildObject.buildErrObject(422, err.message));
+    //             }
+    //             resolve(item.map((p) => p._id));
+    //         });
+    //     });
+    // };
     findAll = async () => {
         return new Promise((resolve, reject) => {
             Permission.find({})
