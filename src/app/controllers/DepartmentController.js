@@ -10,7 +10,7 @@ class DepartmentController {
     listDepartment(req, res, next) {
         Department.find({})
             .then((department) => {
-                res.json(department);
+                res.status(200).json(department);
             })
             .catch(next);
     }
@@ -35,7 +35,7 @@ class DepartmentController {
     async updateDepartment(req, res, next) {
         Department.updateOne({ _id: req.body._id }, req.body)
             .then(() => {
-                res.json('Sửa thành công');
+                res.status(200).json('Sửa thành công');
             })
             .catch((err) => {
                 res.status(500).json('Sửa không thành công, lỗi server');

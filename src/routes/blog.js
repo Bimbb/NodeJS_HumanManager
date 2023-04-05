@@ -4,9 +4,9 @@ const blogController = require('../app/controllers/BlogController');
 
 const isAuth = require('../app/middleware/auth');
 
-router.get('/getAll', blogController.listBlog);
-router.post('/create', blogController.createBlog);
-router.put('/:id/update', blogController.updateBlog);
-router.delete('/:id/delete', blogController.deleteBlog);
+router.get('/getAll', isAuth.isAuth, isAuth.isAuthorize(['Blog.VIEW']), blogController.listBlog);
+router.post('/create', isAuth.isAuth, isAuth.isAuthorize(['Blog.CREATE']), blogController.createBlog);
+router.put('/:id/update', isAuth.isAuth, isAuth.isAuthorize(['Blog.UPDATE']), blogController.updateBlog);
+router.delete('/:id/delete', isAuth.isAuth, isAuth.isAuthorize(['Blog.DELETE']), blogController.deleteBlog);
 
 module.exports = router;

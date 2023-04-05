@@ -1,14 +1,7 @@
 class HelloController {
-
     index(req, res) {
-        res.render("Hello!!!!")
+        res.render('Hello!!!!!');
     }
 }
 
-
-
-
-
-
-module.exports = new HelloController;
-
+module.exports = new HelloController();

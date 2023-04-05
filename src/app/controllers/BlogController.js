@@ -7,7 +7,7 @@ class BlogController {
     listBlog(req, res, next) {
         Blog.find({})
             .then((blogs) => {
-                res.json(blogs);
+                res.status(200).json(blogs);
             })
             .catch(next);
     }
@@ -15,15 +15,12 @@ class BlogController {
     // [POST]/blog/create
     async createBlog(req, res, next) {
         const formBlog = req.body;
-        var uuuuuu = req.body.content;
-        console.log(uuuuuu);
-
         const blog = new Blog(formBlog);
         await blog
             .save({})
             .then((data) => {
                 console.log(data.content);
-                res.json('Thêm thành công');
+                res.status(200).json('Thêm thành công');
             })
             .catch((err) => {
                 res.status(500).json('Thêm không thành công, lỗi server');
@@ -35,7 +32,7 @@ class BlogController {
     async updateBlog(req, res, next) {
         Blog.updateOne({ _id: req.body._id }, req.body)
             .then(() => {
-                res.json('Sửa thành công');
+                res.status(200).json('Sửa thành công');
             })
             .catch((err) => {
                 res.status(500).json('Sửa không thành công, lỗi server');
